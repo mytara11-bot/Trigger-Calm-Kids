@@ -236,12 +236,6 @@
 
     <!-- Script Logic -->
     <script>
-        // Pre-load voices to ensure they are ready for the Australian accent
-        let speechVoices = [];
-        window.speechSynthesis.onvoiceschanged = () => {
-            speechVoices = window.speechSynthesis.getVoices();
-        };
-
         // Navigation Logic
         function navTo(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -356,11 +350,22 @@
             clearInterval(breathInterval);
         }
 
-        // --- The Sleepy Cloud Story Logic ---
+        // --- The Sleepy Cloud Story Logic (CUSTOM AUDIO) ---
         const rawStory = "Once there was a little cloud. The cloud felt very heavy and sad. But then, the cloud took a deep, slow breath. And blew all the worry away. Now the cloud is light, safe, and happy.";
         const storyContainer = document.getElementById('story-container');
         let storyInterval;
+        let storyFallbackTimer;
         
+        // -------------------------------------------------------------
+        // BARB: This now links directly to the file in your GitHub repo!
+        // -------------------------------------------------------------
+        const YOUR_AUDIO_LINK = "The Sleep Cloud.mp4"; 
+        
+        let storyAudio = null;
+        if (YOUR_AUDIO_LINK !== "") {
+            storyAudio = new Audio(YOUR_AUDIO_LINK);
+        }
+
         // Build the story words
         const words = [];
         rawStory.split(' ').forEach(word => {
@@ -377,75 +382,37 @@
             
             words.forEach(w => w.classList.remove('active-word')); 
             
-            // Text to Speech
-            if ('speechSynthesis' in window) {
-                speechSynthesis.cancel();
-                const msg = new SpeechSynthesisUtterance(rawStory);
-                
-                // Set the Australian Accent
-                speechVoices = window.speechSynthesis.getVoices(); // Refresh voices for mobile
-                
-                // Prioritize natural female Australian voices, specifically targeting premium mobile network voices
-                const premiumNames = ['Matilda', 'Karen', 'Catherine', 'Natasha', 'network', 'Neural', 'Wavenet', 'Google'];
-                let auVoice = speechVoices.find(v => 
-                    (v.lang.includes('en-AU') || v.lang.includes('en_AU')) && 
-                    premiumNames.some(name => v.name.toLowerCase().includes(name.toLowerCase()) || v.voiceURI.toLowerCase().includes(name.toLowerCase()))
-                );
-                
-                // Fallback to any female Australian, then any Australian voice
-                if (!auVoice) auVoice = speechVoices.find(v => (v.lang.includes('en-AU') || v.lang.includes('en_AU')) && v.name.toLowerCase().includes('female'));
-                if (!auVoice) auVoice = speechVoices.find(v => v.lang.includes('en-AU') || v.lang.includes('en_AU'));
-
-                if (auVoice) {
-                    msg.voice = auVoice;
-                }
-
-                // CRITICAL FOR MOBILE: Changing the rate from exactly 1.0 on iOS/Android 
-                // forces the phone to use an artificial, robotic pitch-shifting algorithm.
-                msg.rate = 1.0; 
-                msg.pitch = 1.0; 
-                
-                // Sync the bouncing dot with the words being spoken!
-                msg.onboundary = function(event) {
-                    if (event.name === 'word') {
-                        words.forEach(w => w.classList.remove('active-word'));
-                        
-                        let cumulativeLength = 0;
-                        for (let i = 0; i < words.length; i++) {
-                            // Find which word matches the character index being spoken
-                            if (event.charIndex >= cumulativeLength && event.charIndex < cumulativeLength + words[i].innerText.length + 1) {
-                                words[i].classList.add('active-word');
-                                if (navigator.vibrate) navigator.vibrate(20);
-                                break;
-                            }
-                            cumulativeLength += words[i].innerText.length + 1; // +1 for the space
-                        }
-                    }
-                };
-
-                msg.onend = function() { stopStory(); };
-                speechSynthesis.speak(msg);
-
+            if (storyAudio) {
+                // Play your custom voice recording!
+                storyAudio.currentTime = 0;
+                storyAudio.play().catch(e => console.log("Audio failed to play", e));
+                storyAudio.onended = function() { stopStory(); };
             } else {
-                // Fallback for browsers without speech synthesis
-                let currentIndex = 0;
-                storyInterval = setInterval(() => {
-                    if (currentIndex > 0) words[currentIndex - 1].classList.remove('active-word');
-                    if (currentIndex < words.length) {
-                        words[currentIndex].classList.add('active-word');
-                        if (navigator.vibrate) navigator.vibrate(20);
-                        currentIndex++;
-                    } else {
-                        stopStory();
-                    }
-                }, 450); 
+                // If you haven't added your link yet, this timer automatically stops the story after 14 seconds
+                storyFallbackTimer = setTimeout(() => { stopStory(); }, 14000);
             }
+
+            let currentIndex = 0;
+            // The audio you provided is 14 seconds long, so ~350 milliseconds per word 
+            // creates a very steady, calming bouncing pace that roughly matches the story.
+            storyInterval = setInterval(() => {
+                if (currentIndex > 0) words[currentIndex - 1].classList.remove('active-word');
+                if (currentIndex < words.length) {
+                    words[currentIndex].classList.add('active-word');
+                    if (navigator.vibrate) navigator.vibrate(20);
+                    currentIndex++;
+                } else {
+                    clearInterval(storyInterval);
+                }
+            }, 350); 
         }
 
         function stopStory() {
             clearInterval(storyInterval);
-            if ('speechSynthesis' in window) {
-                speechSynthesis.cancel();
+            clearTimeout(storyFallbackTimer);
+            if (storyAudio) {
+                storyAudio.pause();
+                storyAudio.currentTime = 0;
             }
             words.forEach(w => w.classList.remove('active-word'));
             document.getElementById('play-story-btn').style.display = 'inline-flex';
