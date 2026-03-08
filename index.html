@@ -8,9 +8,17 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap');
         
+        @keyframes calm-bg {
+            0% { background-color: #f0fdfa; } /* Soft Teal */
+            25% { background-color: #fff1f2; } /* Soft Rose */
+            50% { background-color: #f0f9ff; } /* Soft Sky */
+            75% { background-color: #fffbeb; } /* Soft Amber */
+            100% { background-color: #eef2ff; } /* Soft Indigo */
+        }
+        
         body { 
             font-family: 'Fredoka', sans-serif; 
-            background-color: #F8F9FA; 
+            animation: calm-bg 24s infinite alternate ease-in-out;
             color: #334155;
             overscroll-behavior-y: contain; 
             user-select: none; 
@@ -53,10 +61,10 @@
         }
 
         /* 4. Magic Night Sky Animation */
-        .animate-star { animation: twinkle 2s forwards ease-out; }
+        .animate-star { animation: twinkle 8s forwards ease-out; }
         @keyframes twinkle {
             0% { opacity: 0; transform: scale(0.1) rotate(0deg); }
-            20% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+            10% { opacity: 1; transform: scale(1.2) rotate(45deg); }
             100% { opacity: 0; transform: scale(0.5) rotate(90deg); }
         }
 
@@ -86,7 +94,7 @@
 
         <div class="space-y-4 pb-10">
             <!-- Button 1: Bear -->
-            <button onclick="navTo('page-bear')" class="w-full kid-card p-5 flex items-center gap-5 active:scale-95 transition-transform text-left bg-gradient-to-r from-teal-50 to-emerald-50">
+            <button onclick="navTo('page-bear'); startBreathing();" class="w-full kid-card p-5 flex items-center gap-5 active:scale-95 transition-transform text-left bg-gradient-to-r from-teal-50 to-emerald-50">
                 <div class="w-14 h-14 rounded-full bg-teal-400 flex items-center justify-center text-2xl shadow-inner border-4 border-white shrink-0">🐻</div>
                 <div>
                     <h3 class="text-lg font-bold text-teal-800">Breathe with Bear</h3>
@@ -94,12 +102,12 @@
                 </div>
             </button>
 
-            <!-- Button 2: Story (NEW) -->
+            <!-- Button 2: Story -->
             <button onclick="navTo('page-story')" class="w-full kid-card p-5 flex items-center gap-5 active:scale-95 transition-transform text-left bg-gradient-to-r from-pink-50 to-rose-50">
                 <div class="w-14 h-14 rounded-full bg-rose-400 flex items-center justify-center text-2xl shadow-inner border-4 border-white shrink-0">☁️</div>
                 <div>
                     <h3 class="text-lg font-bold text-rose-800">The Sleepy Cloud</h3>
-                    <p class="text-xs text-rose-600/80 nunito font-bold">Follow the bouncing dot</p>
+                    <p class="text-xs text-rose-600/80 nunito font-bold">Read and follow along</p>
                 </div>
             </button>
 
@@ -112,7 +120,7 @@
                 </div>
             </button>
 
-            <!-- Button 4: Night Sky (NEW) -->
+            <!-- Button 4: Night Sky -->
             <button onclick="navTo('page-sky')" class="w-full kid-card p-5 flex items-center gap-5 active:scale-95 transition-transform text-left bg-gradient-to-r from-indigo-50 to-violet-50">
                 <div class="w-14 h-14 rounded-full bg-indigo-400 flex items-center justify-center text-2xl shadow-inner border-4 border-white shrink-0">✨</div>
                 <div>
@@ -134,15 +142,15 @@
 
     <!-- ACTIVITY 1: BREATHE WITH BEAR -->
     <div id="page-bear" class="page w-full max-w-md mt-2">
-        <button onclick="navTo('page-home')" class="mb-4 flex items-center gap-2 text-slate-400 font-bold nunito bg-white py-2 px-4 rounded-full shadow-sm active:scale-95"><span>←</span> Back</button>
+        <button onclick="navTo('page-home'); stopBreathing();" class="mb-4 flex items-center gap-2 text-slate-400 font-bold nunito bg-white py-2 px-4 rounded-full shadow-sm active:scale-95"><span>←</span> Back</button>
         
         <div class="kid-card p-8 text-center bg-gradient-to-b from-teal-50 to-white">
             <h2 class="text-2xl font-bold text-teal-800 mb-2">Breathe with Bear</h2>
             <p class="text-teal-600 nunito font-bold text-sm mb-12">Make your belly match the bear's belly.</p>
             
             <div class="relative w-56 h-56 mx-auto flex items-center justify-center mb-8">
-                <div class="absolute inset-0 bg-teal-200 rounded-full blur-xl opacity-50 animate-bear"></div>
-                <div class="relative w-48 h-48 rounded-full border-8 border-white shadow-xl overflow-hidden animate-bear z-10 bg-teal-100">
+                <div class="absolute inset-0 bg-teal-200 rounded-full blur-xl opacity-50 animate-bear bear-anim-target"></div>
+                <div class="relative w-48 h-48 rounded-full border-8 border-white shadow-xl overflow-hidden animate-bear bear-anim-target z-10 bg-teal-100">
                     <img src="https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?q=80&w=600&auto=format&fit=crop" alt="Sleeping realistic brown bear" class="w-full h-full object-cover">
                 </div>
             </div>
@@ -153,7 +161,7 @@
         </div>
     </div>
 
-    <!-- ACTIVITY 2: THE SLEEPY CLOUD STORY (NEW) -->
+    <!-- ACTIVITY 2: THE SLEEPY CLOUD STORY -->
     <div id="page-story" class="page w-full max-w-md mt-2">
         <button onclick="navTo('page-home'); stopStory();" class="mb-4 flex items-center gap-2 text-slate-400 font-bold nunito bg-white py-2 px-4 rounded-full shadow-sm active:scale-95"><span>←</span> Back</button>
         
@@ -192,7 +200,7 @@
         </div>
     </div>
 
-    <!-- ACTIVITY 4: MAGIC NIGHT SKY (NEW) -->
+    <!-- ACTIVITY 4: MAGIC NIGHT SKY -->
     <div id="page-sky" class="page w-full max-w-md mt-2 h-[80vh]">
         <div class="flex flex-col h-full w-full">
             <button onclick="navTo('page-home')" class="mb-4 flex items-center gap-2 text-slate-400 font-bold nunito bg-white py-2 px-4 rounded-full shadow-sm active:scale-95 self-start"><span>←</span> Back</button>
@@ -217,7 +225,7 @@
             <h2 class="text-2xl font-bold text-amber-800 mb-2">Color Hunt</h2>
             <p class="text-amber-600 nunito font-bold text-sm mb-8">Find something in the room that matches this color, then tap it!</p>
             
-            <div id="color-target" class="w-48 h-48 mx-auto rounded-full border-8 border-white shadow-xl mb-8 flex items-center justify-center cursor-pointer active:scale-90 transition-transform bg-rose-400" onclick="nextColor()">
+            <div id="color-target" data-color="bg-rose-400" class="w-48 h-48 mx-auto rounded-full border-8 border-white shadow-xl mb-8 flex items-center justify-center cursor-pointer active:scale-90 transition-transform bg-rose-400" onclick="nextColor(event)">
                 <span class="text-white text-5xl font-bold drop-shadow-md">Tap</span>
             </div>
 
@@ -228,6 +236,12 @@
 
     <!-- Script Logic -->
     <script>
+        // Pre-load voices to ensure they are ready for the Australian accent
+        let speechVoices = [];
+        window.speechSynthesis.onvoiceschanged = () => {
+            speechVoices = window.speechSynthesis.getVoices();
+        };
+
         // Navigation Logic
         function navTo(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -235,15 +249,112 @@
             window.scrollTo(0, 0);
         }
 
-        // --- Bear Breathing Logic ---
+        // --- Universal Fireworks Function ---
+        function createFireworks(x, y, colorClass, count = 24) {
+            for(let i=0; i<count; i++) {
+                const particle = document.createElement('div');
+                particle.className = `fixed rounded-full pointer-events-none z-50 ${colorClass}`;
+                particle.style.width = '12px';
+                particle.style.height = '12px';
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 50 + Math.random() * 120;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 600 + Math.random() * 500,
+                    easing: 'cubic-bezier(0, .9, .57, 1)'
+                });
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1200);
+            }
+        }
+
+        // --- Bear Breathing Audio Logic ---
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playBreathSound(isInhale) {
+            if (!audioCtx) return;
+            const bufferSize = audioCtx.sampleRate * 4; // 4 second duration
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            // Create soft white noise
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            // Lowpass filter to make it sound like a soothing breath/ocean wave
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            // Inhale slightly higher pitch (like drawing air in), exhale deeper
+            filter.frequency.value = isInhale ? 700 : 450; 
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            // Softly fade in, hold peak, and smoothly fade out
+            gain.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 1.5);
+            gain.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 2.5);
+            gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 3.8);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            noise.start();
+        }
+
+        // --- Bear Breathing Timing Logic ---
         const breathText = document.getElementById('breath-text');
-        setInterval(() => {
-            breathText.style.opacity = 0;
-            setTimeout(() => {
-                breathText.innerText = breathText.innerText === "Breathe In..." ? "Breathe Out..." : "Breathe In...";
-                breathText.style.opacity = 1;
-            }, 500);
-        }, 4000);
+        let breathInterval;
+        let isBreathingIn = true;
+
+        function startBreathing() {
+            initAudio();
+            stopBreathing();
+            
+            // Resync CSS Animations so they match the text perfectly
+            const bearElts = document.querySelectorAll('.bear-anim-target');
+            bearElts.forEach(el => {
+                el.style.animation = 'none';
+                el.offsetHeight; // trigger reflow
+                el.style.animation = null; 
+            });
+
+            isBreathingIn = true;
+            breathText.innerText = "Breathe In...";
+            breathText.style.opacity = 1;
+            playBreathSound(true);
+
+            breathInterval = setInterval(() => {
+                breathText.style.opacity = 0;
+                setTimeout(() => {
+                    isBreathingIn = !isBreathingIn;
+                    breathText.innerText = isBreathingIn ? "Breathe In..." : "Breathe Out...";
+                    breathText.style.opacity = 1;
+                    playBreathSound(isBreathingIn);
+                }, 500);
+            }, 4000);
+        }
+
+        function stopBreathing() {
+            clearInterval(breathInterval);
+        }
 
         // --- The Sleepy Cloud Story Logic ---
         const rawStory = "Once there was a little cloud. The cloud felt very heavy and sad. But then, the cloud took a deep, slow breath. And blew all the worry away. Now the cloud is light, safe, and happy.";
@@ -251,42 +362,90 @@
         let storyInterval;
         
         // Build the story words
+        const words = [];
         rawStory.split(' ').forEach(word => {
             const span = document.createElement('span');
             span.className = 'story-word';
             span.innerText = word;
             storyContainer.appendChild(span);
+            words.push(span);
         });
 
         function startStory() {
             const btn = document.getElementById('play-story-btn');
-            btn.style.display = 'none'; // Hide button while playing
+            btn.style.display = 'none'; 
             
-            const words = document.querySelectorAll('.story-word');
-            words.forEach(w => w.classList.remove('active-word')); // Reset
+            words.forEach(w => w.classList.remove('active-word')); 
             
-            let currentIndex = 0;
-            
-            storyInterval = setInterval(() => {
-                // Remove active class from previous word
-                if (currentIndex > 0) words[currentIndex - 1].classList.remove('active-word');
+            // Text to Speech
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance(rawStory);
                 
-                // Add active class to current word
-                if (currentIndex < words.length) {
-                    words[currentIndex].classList.add('active-word');
-                    // Tiny vibration if phone supports it
-                    if (navigator.vibrate) navigator.vibrate(20);
-                    currentIndex++;
-                } else {
-                    // Story finished
-                    stopStory();
+                // Set the Australian Accent
+                if (speechVoices.length === 0) {
+                    speechVoices = window.speechSynthesis.getVoices();
                 }
-            }, 450); // Faster speed for better reading rhythm
+                
+                // Prioritize natural female Australian voices across different devices (Added 'Google' for smoother Chrome voices)
+                const preferredNames = ['Google', 'Karen', 'Catherine', 'Natasha', 'en-AU-Neural2-A', 'en-AU-Neural2-C', 'en-AU-Wavenet-A', 'en-AU-Wavenet-C', 'en-AU-Standard-A', 'en-AU-Standard-C'];
+                let auVoice = speechVoices.find(v => (v.lang.includes('en-AU') || v.lang.includes('en_AU')) && preferredNames.some(name => v.name.includes(name)));
+                
+                // Fallback to any female Australian, then any Australian voice
+                if (!auVoice) auVoice = speechVoices.find(v => (v.lang.includes('en-AU') || v.lang.includes('en_AU')) && v.name.toLowerCase().includes('female'));
+                if (!auVoice) auVoice = speechVoices.find(v => v.lang.includes('en-AU') || v.lang.includes('en_AU'));
+
+                if (auVoice) {
+                    msg.voice = auVoice;
+                }
+
+                // Speeding it up slightly: artificially slowing down TTS (like 0.85) is the #1 cause of a "robotic" or distorted sound.
+                msg.rate = 0.95; 
+                msg.pitch = 1.0; 
+                
+                // Sync the bouncing dot with the words being spoken!
+                msg.onboundary = function(event) {
+                    if (event.name === 'word') {
+                        words.forEach(w => w.classList.remove('active-word'));
+                        
+                        let cumulativeLength = 0;
+                        for (let i = 0; i < words.length; i++) {
+                            // Find which word matches the character index being spoken
+                            if (event.charIndex >= cumulativeLength && event.charIndex < cumulativeLength + words[i].innerText.length + 1) {
+                                words[i].classList.add('active-word');
+                                if (navigator.vibrate) navigator.vibrate(20);
+                                break;
+                            }
+                            cumulativeLength += words[i].innerText.length + 1; // +1 for the space
+                        }
+                    }
+                };
+
+                msg.onend = function() { stopStory(); };
+                speechSynthesis.speak(msg);
+
+            } else {
+                // Fallback for browsers without speech synthesis
+                let currentIndex = 0;
+                storyInterval = setInterval(() => {
+                    if (currentIndex > 0) words[currentIndex - 1].classList.remove('active-word');
+                    if (currentIndex < words.length) {
+                        words[currentIndex].classList.add('active-word');
+                        if (navigator.vibrate) navigator.vibrate(20);
+                        currentIndex++;
+                    } else {
+                        stopStory();
+                    }
+                }, 450); 
+            }
         }
 
         function stopStory() {
             clearInterval(storyInterval);
-            document.querySelectorAll('.story-word').forEach(w => w.classList.remove('active-word'));
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+            }
+            words.forEach(w => w.classList.remove('active-word'));
             document.getElementById('play-story-btn').style.display = 'inline-flex';
             document.getElementById('play-story-btn').innerHTML = 'Read Again';
         }
@@ -296,7 +455,6 @@
         let lastStarTime = 0;
 
         function spawnStar(clientX, clientY) {
-            // Prevent spawning too many stars too quickly
             const now = Date.now();
             if (now - lastStarTime < 50) return; 
             lastStarTime = now;
@@ -306,7 +464,7 @@
             const y = clientY - rect.top;
 
             const star = document.createElement('div');
-            const size = Math.random() * 12 + 6; // random size between 6px and 18px
+            const size = Math.random() * 12 + 6;
             
             star.className = 'absolute bg-white rounded-full pointer-events-none animate-star';
             star.style.width = `${size}px`;
@@ -314,7 +472,6 @@
             star.style.left = `${x - size/2}px`;
             star.style.top = `${y - size/2}px`;
             
-            // Add a soft glow based on size
             const colors = ['#ffffff', '#e2e8f0', '#fde68a', '#bae6fd'];
             const color = colors[Math.floor(Math.random() * colors.length)];
             star.style.backgroundColor = color;
@@ -322,19 +479,19 @@
 
             starCanvas.appendChild(star);
 
-            // Clean up DOM after animation finishes (2 seconds)
-            setTimeout(() => { star.remove(); }, 2000);
+            // Clean up DOM after 8 seconds
+            setTimeout(() => { star.remove(); }, 8000);
         }
 
         // Mouse Events
         starCanvas.addEventListener('mousemove', (e) => {
-            if (e.buttons > 0) spawnStar(e.clientX, e.clientY); // Only if clicking and dragging
+            if (e.buttons > 0) spawnStar(e.clientX, e.clientY);
         });
         starCanvas.addEventListener('mousedown', (e) => spawnStar(e.clientX, e.clientY));
 
         // Touch Events
         starCanvas.addEventListener('touchmove', (e) => {
-            e.preventDefault(); // Stop screen from scrolling while drawing
+            e.preventDefault();
             for (let i = 0; i < e.touches.length; i++) {
                 spawnStar(e.touches[i].clientX, e.touches[i].clientY);
             }
@@ -349,16 +506,37 @@
         // --- Bubble Pop Logic ---
         const bubbleColors = ['bg-rose-300', 'bg-sky-300', 'bg-teal-300', 'bg-amber-300', 'bg-purple-300'];
         const bubbleGrid = document.getElementById('bubble-grid');
+        let poppedCount = 0;
 
         function createBubbles() {
             bubbleGrid.innerHTML = '';
+            poppedCount = 0;
             for(let i=0; i<16; i++) {
-                let color = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
+                let colorClass = bubbleColors[Math.floor(Math.random() * bubbleColors.length)];
                 let bubble = document.createElement('div');
-                bubble.className = `bubble w-full aspect-square rounded-full shadow-inner border-2 border-white/50 ${color}`;
+                bubble.className = `bubble w-full aspect-square rounded-full shadow-inner border-2 border-white/50 ${colorClass}`;
+                
                 bubble.onclick = function() { 
+                    if(this.classList.contains('popped')) return; // Stop double clicking
                     this.classList.add('popped');
                     if (navigator.vibrate) navigator.vibrate(30); 
+                    
+                    poppedCount++;
+                    // Trigger massive fireworks if all bubbles are popped
+                    if (poppedCount === 16) {
+                        const rect = bubbleGrid.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        
+                        // Launch multiple fireworks!
+                        createFireworks(centerX, centerY, 'bg-sky-400', 30);
+                        setTimeout(() => createFireworks(centerX - 50, centerY - 20, 'bg-rose-400', 25), 200);
+                        setTimeout(() => createFireworks(centerX + 60, centerY + 30, 'bg-amber-400', 35), 400);
+                        setTimeout(() => createFireworks(centerX, centerY - 50, 'bg-teal-400', 20), 600);
+                        
+                        // Auto reset after showing off the fireworks
+                        setTimeout(() => resetBubbles(), 3000);
+                    }
                 };
                 bubbleGrid.appendChild(bubble);
             }
@@ -372,20 +550,31 @@
             { hex: 'bg-sky-400', name: 'Blue', textClass: 'text-sky-500' },
             { hex: 'bg-emerald-400', name: 'Green', textClass: 'text-emerald-500' },
             { hex: 'bg-amber-400', name: 'Yellow', textClass: 'text-amber-500' },
-            { hex: 'bg-purple-400', name: 'Purple', textClass: 'text-purple-500' }
+            { hex: 'bg-purple-400', name: 'Purple', textClass: 'text-purple-500' },
+            { hex: 'bg-orange-400', name: 'Orange', textClass: 'text-orange-500' }, 
+            { hex: 'bg-pink-400', name: 'Pink', textClass: 'text-pink-500' } 
         ];
         let score = 0;
 
-        function nextColor() {
+        function nextColor(event) {
             if (navigator.vibrate) navigator.vibrate(50); 
             score++;
             document.getElementById('color-score').innerText = score;
-            let randomColor = huntColors[Math.floor(Math.random() * huntColors.length)];
             
             const target = document.getElementById('color-target');
-            const name = document.getElementById('color-name');
+            const rect = target.getBoundingClientRect();
+            const prevColorClass = target.getAttribute('data-color');
+            
+            // Generate Fireworks Burst using the universal function
+            createFireworks(rect.left + rect.width/2, rect.top + rect.height/2, prevColorClass, 24);
+
+            // Set Next Color
+            let randomColor = huntColors[Math.floor(Math.random() * huntColors.length)];
             
             target.className = `w-48 h-48 mx-auto rounded-full border-8 border-white shadow-xl mb-8 flex items-center justify-center cursor-pointer active:scale-90 transition-transform ${randomColor.hex}`;
+            target.setAttribute('data-color', randomColor.hex); 
+            
+            const name = document.getElementById('color-name');
             name.innerText = randomColor.name;
             name.className = `text-2xl font-bold uppercase tracking-wide ${randomColor.textClass}`;
         }
