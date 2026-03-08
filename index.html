@@ -383,13 +383,14 @@
                 const msg = new SpeechSynthesisUtterance(rawStory);
                 
                 // Set the Australian Accent
-                if (speechVoices.length === 0) {
-                    speechVoices = window.speechSynthesis.getVoices();
-                }
+                speechVoices = window.speechSynthesis.getVoices(); // Refresh voices for mobile
                 
-                // Prioritize natural female Australian voices across different devices (Added 'Google' for smoother Chrome voices)
-                const preferredNames = ['Google', 'Karen', 'Catherine', 'Natasha', 'en-AU-Neural2-A', 'en-AU-Neural2-C', 'en-AU-Wavenet-A', 'en-AU-Wavenet-C', 'en-AU-Standard-A', 'en-AU-Standard-C'];
-                let auVoice = speechVoices.find(v => (v.lang.includes('en-AU') || v.lang.includes('en_AU')) && preferredNames.some(name => v.name.includes(name)));
+                // Prioritize natural female Australian voices, specifically targeting premium mobile network voices
+                const premiumNames = ['Matilda', 'Karen', 'Catherine', 'Natasha', 'network', 'Neural', 'Wavenet', 'Google'];
+                let auVoice = speechVoices.find(v => 
+                    (v.lang.includes('en-AU') || v.lang.includes('en_AU')) && 
+                    premiumNames.some(name => v.name.toLowerCase().includes(name.toLowerCase()) || v.voiceURI.toLowerCase().includes(name.toLowerCase()))
+                );
                 
                 // Fallback to any female Australian, then any Australian voice
                 if (!auVoice) auVoice = speechVoices.find(v => (v.lang.includes('en-AU') || v.lang.includes('en_AU')) && v.name.toLowerCase().includes('female'));
@@ -399,8 +400,9 @@
                     msg.voice = auVoice;
                 }
 
-                // Speeding it up slightly: artificially slowing down TTS (like 0.85) is the #1 cause of a "robotic" or distorted sound.
-                msg.rate = 0.95; 
+                // CRITICAL FOR MOBILE: Changing the rate from exactly 1.0 on iOS/Android 
+                // forces the phone to use an artificial, robotic pitch-shifting algorithm.
+                msg.rate = 1.0; 
                 msg.pitch = 1.0; 
                 
                 // Sync the bouncing dot with the words being spoken!
