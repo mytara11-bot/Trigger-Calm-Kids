@@ -393,8 +393,9 @@
             }
 
             let currentIndex = 0;
-            // The audio you provided is 14 seconds long, so ~350 milliseconds per word 
-            // creates a very steady, calming bouncing pace that roughly matches the story.
+            // I have slowed the bouncing dot down from 350 to 450 milliseconds per word. 
+            // BARB: If it is STILL too fast, increase the 450 below to 500 or 550. 
+            // If it is now too slow, lower it to 400. 
             storyInterval = setInterval(() => {
                 if (currentIndex > 0) words[currentIndex - 1].classList.remove('active-word');
                 if (currentIndex < words.length) {
@@ -404,7 +405,7 @@
                 } else {
                     clearInterval(storyInterval);
                 }
-            }, 350); 
+            }, 450); 
         }
 
         function stopStory() {
